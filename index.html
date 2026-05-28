@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP Server Config Generator - Create Claude Desktop & Cursor MCP Configs Instantly</title>
+    <meta name="description" content="Generate MCP server configuration files for Claude Desktop, Cursor, VS Code and Windsurf. Free online tool with 20+ popular server templates, custom config builder and one-click copy.">
+    <meta name="keywords" content="MCP server config generator, Claude Desktop config, Cursor MCP, mcp.json generator, MCP configuration, model context protocol, AI agent config, MCP server setup">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://mcp-config-generator.vercel.app/">
+    <meta property="og:title" content="MCP Server Config Generator - Free Claude Desktop & Cursor Config Builder">
+    <meta property="og:description" content="Generate MCP server configuration files instantly. 20+ templates for Claude Desktop, Cursor, VS Code and Windsurf. Free online tool.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"WebApplication","name":"MCP Server Config Generator","description":"Free online MCP server configuration generator for Claude Desktop, Cursor, VS Code and Windsurf","url":"https://mcp-config-generator.vercel.app/","applicationCategory":"DeveloperApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+    </script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{--bg:#0d1117;--card:#161b22;--card2:#1c2333;--border:#30363d;--text:#e6edf3;--text2:#8b949e;--accent:#58a6ff;--accent2:#79c0ff;--green:#3fb950;--orange:#d29922;--purple:#bc8cff;--red:#f85149}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+        .container{max-width:1200px;margin:0 auto;padding:20px}
+        header{text-align:center;padding:40px 20px 30px}
+        header h1{font-size:2.2em;margin-bottom:8px;background:linear-gradient(135deg,var(--accent),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        header p{color:var(--text2);font-size:1.1em;max-width:600px;margin:0 auto}
+        .lang-toggle{position:fixed;top:20px;right:20px;background:var(--card);border:1px solid var(--border);color:var(--text);padding:6px 14px;border-radius:20px;cursor:pointer;font-size:0.85em;z-index:100;transition:all 0.2s}
+        .lang-toggle:hover{border-color:var(--accent);color:var(--accent)}
+        .mode-tabs{display:flex;gap:8px;justify-content:center;margin-bottom:30px;flex-wrap:wrap}
+        .mode-tab{padding:10px 20px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--text2);cursor:pointer;transition:all 0.2s;font-size:0.95em}
+        .mode-tab.active{background:var(--accent);color:#000;border-color:var(--accent);font-weight:600}
+        .mode-tab:hover:not(.active){border-color:var(--accent);color:var(--text)}
+        .grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+        @media(max-width:768px){.grid{grid-template-columns:1fr}}
+        .panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px}
+        .panel h2{font-size:1.2em;margin-bottom:16px;color:var(--accent)}
+        .section-label{font-size:0.85em;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px}
+        select,input[type="text"],input[type="number"],textarea{width:100%;padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--text);font-size:0.95em;margin-bottom:12px;font-family:inherit;transition:border-color 0.2s}
+        select:focus,input:focus,textarea:focus{outline:none;border-color:var(--accent)}
+        textarea{resize:vertical;min-height:60px;font-family:'SF Mono',Consolas,'Courier New',monospace;font-size:0.88em}
+        .checkbox-group{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+        .checkbox-label{display:flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:0.88em;transition:all 0.2s;background:var(--card2)}
+        .checkbox-label:hover{border-color:var(--accent)}
+        .checkbox-label input{margin:0;width:auto}
+        .checkbox-label.checked{border-color:var(--green);background:rgba(63,185,80,0.1)}
+        .btn{padding:12px 24px;border-radius:8px;border:none;cursor:pointer;font-size:0.95em;font-weight:600;transition:all 0.2s;display:inline-flex;align-items:center;gap:8px}
+        .btn-primary{background:var(--accent);color:#000}
+        .btn-primary:hover{background:var(--accent2)}
+        .btn-success{background:var(--green);color:#000}
+        .btn-success:hover{opacity:0.9}
+        .btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}
+        .btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+        .btn-sm{padding:8px 16px;font-size:0.85em}
+        .btn-group{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+        .output-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+        .output-box{background:#0d1117;border:1px solid var(--border);border-radius:8px;padding:16px;font-family:'SF Mono',Consolas,'Courier New',monospace;font-size:0.85em;overflow-x:auto;white-space:pre-wrap;word-break:break-all;line-height:1.7;color:var(--green);max-height:500px;overflow-y:auto;position:relative}
+        .template-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-bottom:16px}
+        .template-card{padding:10px;border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all 0.2s;background:var(--card2);text-align:center}
+        .template-card:hover{border-color:var(--accent);transform:translateY(-1px)}
+        .template-card.selected{border-color:var(--green);background:rgba(63,185,80,0.1)}
+        .template-card .icon{font-size:1.5em;margin-bottom:4px}
+        .template-card .name{font-size:0.85em;font-weight:600}
+        .template-card .desc{font-size:0.72em;color:var(--text2);margin-top:2px}
+        .env-row{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+        .env-row input{flex:1;margin-bottom:0}
+        .env-row .btn-remove{background:var(--red);color:#fff;border:none;border-radius:6px;padding:6px 10px;cursor:pointer;font-size:0.8em}
+        .faq-section{margin-top:40px;max-width:800px;margin-left:auto;margin-right:auto}
+        .faq-item{background:var(--card);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden}
+        .faq-q{padding:14px 18px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:500;transition:background 0.2s}
+        .faq-q:hover{background:var(--card2)}
+        .faq-a{padding:0 18px;max-height:0;overflow:hidden;transition:all 0.3s;color:var(--text2);font-size:0.92em}
+        .faq-item.open .faq-a{padding:0 18px 14px;max-height:500px}
+        .faq-item.open .faq-arrow{transform:rotate(180deg)}
+        .faq-arrow{transition:transform 0.3s;font-size:0.8em;color:var(--text2)}
+        footer{text-align:center;padding:40px 20px;color:var(--text2);font-size:0.85em;border-top:1px solid var(--border);margin-top:40px}
+        .badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+        .badge{padding:4px 12px;border-radius:12px;font-size:0.75em;background:var(--card2);border:1px solid var(--border);color:var(--text2)}
+        .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--green);color:#000;padding:12px 24px;border-radius:8px;font-weight:600;z-index:1000;opacity:0;transition:opacity 0.3s;pointer-events:none}
+        .toast.show{opacity:1}
+        .custom-fields{display:none}
+        .custom-fields.visible{display:block}
+        .tips{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-top:16px;font-size:0.85em;color:var(--text2)}
+        .tips strong{color:var(--orange)}
+        .path-hint{font-size:0.75em;color:var(--text2);margin-top:-8px;margin-bottom:12px}
+        .client-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:0.7em;font-weight:600;margin-left:6px}
+        .client-claude{background:#d4a574;color:#000}
+        .client-cursor{background:#7c3aed;color:#fff}
+        .client-vscode{background:#007acc;color:#fff}
+        .client-windsurf{background:#22c55e;color:#000}
+    </style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()" id="langBtn">中文</button>
+<div class="container">
+    <header>
+        <h1>🔧 MCP Server Config Generator</h1>
+        <p data-i18n="subtitle">Generate MCP server configuration for Claude Desktop, Cursor, VS Code & Windsurf. Pick templates, customize, copy.</p>
+        <div class="badges">
+            <span class="badge">✅ 100% Free</span>
+            <span class="badge">🔒 No Upload</span>
+            <span class="badge">⚡ Instant</span>
+            <span class="badge">🌐 Claude / Cursor / VS Code / Windsurf</span>
+        </div>
+    </header>
+
+    <div class="mode-tabs" id="modeTabs">
+        <div class="mode-tab active" onclick="switchMode('template')" data-i18n="mode_template">📋 Template Builder</div>
+        <div class="mode-tab" onclick="switchMode('custom')" data-i18n="mode_custom">✏️ Custom Config</div>
+        <div class="mode-tab" onclick="switchMode('multi')" data-i18n="mode_multi">📦 Multi-Server Bundle</div>
+    </div>
+
+    <div class="grid">
+        <div class="panel" id="inputPanel">
+            <!-- Template Mode -->
+            <div id="templateMode">
+                <h2 data-i18n="pick_server">Pick MCP Servers</h2>
+                <div class="template-grid" id="templateGrid"></div>
+                <div id="serverConfig"></div>
+            </div>
+            <!-- Custom Mode -->
+            <div id="customMode" class="custom-fields">
+                <h2 data-i18n="custom_title">Custom Server Config</h2>
+                <div class="section-label" data-i18n="client_label">Target Client</div>
+                <select id="customClient" onchange="generateCustom()">
+                    <option value="claude">Claude Desktop</option>
+                    <option value="cursor">Cursor</option>
+                    <option value="vscode">VS Code (Copilot)</option>
+                    <option value="windsurf">Windsurf</option>
+                </select>
+                <div class="section-label" data-i18n="server_name">Server Name</div>
+                <input type="text" id="customName" placeholder="my-mcp-server" oninput="generateCustom()">
+                <div class="section-label" data-i18n="command_label">Command</div>
+                <input type="text" id="customCommand" placeholder="npx" oninput="generateCustom()">
+                <div class="section-label" data-i18n="args_label">Arguments (one per line)</div>
+                <textarea id="customArgs" rows="4" placeholder="-y&#10;@modelcontextprotocol/server-filesystem&#10;/path/to/files" oninput="generateCustom()"></textarea>
+                <div class="section-label" data-i18n="env_label">Environment Variables</div>
+                <div id="customEnv"></div>
+                <button class="btn btn-outline btn-sm" onclick="addCustomEnv()" data-i18n="add_env">+ Add Variable</button>
+            </div>
+            <!-- Multi-Server Mode -->
+            <div id="multiMode" class="custom-fields">
+                <h2 data-i18n="multi_title">Multi-Server Bundle</h2>
+                <p style="color:var(--text2);font-size:0.9em;margin-bottom:12px" data-i18n="multi_desc">Select multiple servers to bundle into one config file.</p>
+                <div class="section-label" data-i18n="client_label">Target Client</div>
+                <select id="multiClient" onchange="generateMulti()">
+                    <option value="claude">Claude Desktop</option>
+                    <option value="cursor">Cursor</option>
+                    <option value="vscode">VS Code (Copilot)</option>
+                    <option value="windsurf">Windsurf</option>
+                </select>
+                <div class="checkbox-group" id="multiCheckboxGroup"></div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="output-header">
+                <h2 data-i18n="output_title">Generated Config</h2>
+                <div>
+                    <span id="outputClient" class="client-badge client-claude">Claude Desktop</span>
+                </div>
+            </div>
+            <div class="output-box" id="outputBox">// Select a server to generate config</div>
+            <div class="btn-group">
+                <button class="btn btn-success" onclick="copyConfig()" data-i18n="copy">📋 Copy</button>
+                <button class="btn btn-outline" onclick="downloadConfig()" data-i18n="download">⬇️ Download JSON</button>
+                <button class="btn btn-outline btn-sm" onclick="clearConfig()" data-i18n="clear">🗑️ Clear</button>
+            </div>
+            <div class="tips" id="tipsBox" style="display:none">
+                <strong>💡 Tips:</strong> <span id="tipsText"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-section">
+        <h2 style="text-align:center;margin-bottom:20px;color:var(--accent)" data-i18n="faq_title">❓ Frequently Asked Questions</h2>
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-q"><span data-i18n="faq1_q">What is MCP (Model Context Protocol)?</span><span class="faq-arrow">▼</span></div>
+            <div class="faq-a" data-i18n="faq1_a">MCP is an open protocol by Anthropic that allows AI assistants (like Claude, ChatGPT) to connect to external tools and data sources. It standardizes how AI models interact with APIs, databases, file systems and more. Think of it as "USB for AI" - a universal plug standard.</div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-q"><span data-i18n="faq2_q">Where do I put the generated config?</span><span class="faq-arrow">▼</span></div>
+            <div class="faq-a" data-i18n="faq2_a">Each client has its own config location:<br><b>Claude Desktop</b>: Settings → Developer → Edit Config (claude_desktop_config.json)<br><b>Cursor</b>: Settings → MCP → Edit mcp.json<br><b>VS Code</b>: ~/.vscode/mcp.json (or use the Copilot extension settings)<br><b>Windsurf</b>: ~/.windsurf/mcp.json</div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-q"><span data-i18n="faq3_q">Do I need to install anything?</span><span class="faq-arrow">▼</span></div>
+            <div class="faq-a" data-i18n="faq3_a">Most MCP servers run via <code>npx</code> (Node.js) or <code>uvx</code> (Python). You need Node.js 18+ or Python 3.10+ installed. The <code>npx -y</code> flag auto-downloads the server package on first run.</div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-q"><span data-i18n="faq4_q">How is this tool different from mcp.so or smithery?</span><span class="faq-arrow">▼</span></div>
+            <div class="faq-a" data-i18n="faq4_a">mcp.so and smithery are MCP server directories - they help you discover servers. This tool is a <b>config generator</b> - it helps you create the correct JSON configuration file to connect those servers to your AI client. Use both together: discover on mcp.so, configure here.</div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-q"><span data-i18n="faq5_q">Why does Windows need cmd /c wrapper?</span><span class="faq-arrow">▼</span></div>
+            <div class="faq-a" data-i18n="faq5_a">On Windows, <code>npx</code> is actually <code>npx.cmd</code>, which Claude Desktop may not find directly. Wrapping with <code>"command": "cmd", "args": ["/c", "npx", ...]</code> ensures the command runs correctly on all platforms.</div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-q"><span data-i18n="faq6_q">Is my data sent to any server?</span><span class="faq-arrow">▼</span></div>
+            <div class="faq-a" data-i18n="faq6_a">No. All generation happens in your browser. Nothing is sent to any server. Your config data stays on your machine.</div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 MCP Server Config Generator. <span data-i18n="footer_text">100% free, no signup required. Made for the MCP community.</span></p>
+    </footer>
+</div>
+<div class="toast" id="toast">Copied!</div>
+
+<script>
+var currentLang = 'en';
+var currentMode = 'template';
+var selectedTemplate = null;
+var currentOutput = '';
+
+var i18n = {
+    en: {
+        subtitle: 'Generate MCP server configuration for Claude Desktop, Cursor, VS Code & Windsurf. Pick templates, customize, copy.',
+        mode_template: '📋 Template Builder',
+        mode_custom: '✏️ Custom Config',
+        mode_multi: '📦 Multi-Server Bundle',
+        pick_server: 'Pick MCP Servers',
+        custom_title: 'Custom Server Config',
+        client_label: 'Target Client',
+        server_name: 'Server Name',
+        command_label: 'Command',
+        args_label: 'Arguments (one per line)',
+        env_label: 'Environment Variables',
+        add_env: '+ Add Variable',
+        multi_title: 'Multi-Server Bundle',
+        multi_desc: 'Select multiple servers to bundle into one config file.',
+        output_title: 'Generated Config',
+        copy: '📋 Copy',
+        download: '⬇️ Download JSON',
+        clear: '🗑️ Clear',
+        faq_title: '❓ Frequently Asked Questions',
+        faq1_q: 'What is MCP (Model Context Protocol)?',
+        faq1_a: 'MCP is an open protocol by Anthropic that allows AI assistants (like Claude, ChatGPT) to connect to external tools and data sources. It standardizes how AI models interact with APIs, databases, file systems and more. Think of it as "USB for AI" - a universal plug standard.',
+        faq2_q: 'Where do I put the generated config?',
+        faq2_a: 'Each client has its own config location:<br><b>Claude Desktop</b>: Settings → Developer → Edit Config (claude_desktop_config.json)<br><b>Cursor</b>: Settings → MCP → Edit mcp.json<br><b>VS Code</b>: ~/.vscode/mcp.json (or use the Copilot extension settings)<br><b>Windsurf</b>: ~/.windsurf/mcp.json',
+        faq3_q: 'Do I need to install anything?',
+        faq3_a: 'Most MCP servers run via <code>npx</code> (Node.js) or <code>uvx</code> (Python). You need Node.js 18+ or Python 3.10+ installed. The <code>npx -y</code> flag auto-downloads the server package on first run.',
+        faq4_q: 'How is this tool different from mcp.so or smithery?',
+        faq4_a: 'mcp.so and smithery are MCP server directories - they help you discover servers. This tool is a <b>config generator</b> - it helps you create the correct JSON configuration file to connect those servers to your AI client. Use both together: discover on mcp.so, configure here.',
+        faq5_q: 'Why does Windows need cmd /c wrapper?',
+        faq5_a: 'On Windows, <code>npx</code> is actually <code>npx.cmd</code>, which Claude Desktop may not find directly. Wrapping with <code>"command": "cmd", "args": ["/c", "npx", ...]</code> ensures the command runs correctly on all platforms.',
+        faq6_q: 'Is my data sent to any server?',
+        faq6_a: 'No. All generation happens in your browser. Nothing is sent to any server. Your config data stays on your machine.',
+        footer_text: '100% free, no signup required. Made for the MCP community.'
+    },
+    zh: {
+        subtitle: '一键生成 Claude Desktop、Cursor、VS Code 和 Windsurf 的 MCP 服务器配置。选模板、自定义、复制，搞定。',
+        mode_template: '📋 模板生成',
+        mode_custom: '✏️ 自定义配置',
+        mode_multi: '📦 多服务器打包',
+        pick_server: '选择 MCP 服务器',
+        custom_title: '自定义服务器配置',
+        client_label: '目标客户端',
+        server_name: '服务器名称',
+        command_label: '启动命令',
+        args_label: '参数（每行一个）',
+        env_label: '环境变量',
+        add_env: '+ 添加变量',
+        multi_title: '多服务器打包',
+        multi_desc: '选择多个服务器，一次性生成配置文件。',
+        output_title: '生成的配置',
+        copy: '📋 复制',
+        download: '⬇️ 下载 JSON',
+        clear: '🗑️ 清空',
+        faq_title: '❓ 常见问题',
+        faq1_q: '什么是 MCP（模型上下文协议）？',
+        faq1_a: 'MCP 是 Anthropic 掐出的开放协议，让 AI 助手（如 Claude、ChatGPT）能连接外部工具和数据源。它标准化了 AI 模型与 API、数据库、文件系统等的交互方式。可以理解为 "AI 的 USB 接口"。',
+        faq2_q: '配置文件放在哪里？',
+        faq2_a: '每个客户端的配置位置不同：<br><b>Claude Desktop</b>：设置 → 开发者 → 编辑配置 (claude_desktop_config.json)<br><b>Cursor</b>：设置 → MCP → 编辑 mcp.json<br><b>VS Code</b>：~/.vscode/mcp.json（或使用 Copilot 扩展设置）<br><b>Windsurf</b>：~/.windsurf/mcp.json',
+        faq3_q: '需要安装什么吗？',
+        faq3_a: '大多数 MCP 服务器通过 <code>npx</code>（Node.js）或 <code>uvx</code>（Python）运行。需要 Node.js 18+ 或 Python 3.10+。<code>npx -y</code> 会自动下载服务器包。',
+        faq4_q: '这个工具和 mcp.so、smithery 有什么区别？',
+        faq4_a: 'mcp.so 和 smithery 是 MCP 服务器目录站——帮你发现服务器。本工具是<b>配置生成器</b>——帮你生成正确的 JSON 配置文件来连接这些服务器。两者配合使用：在 mcp.so 上发现，在这里配置。',
+        faq5_q: '为什么 Windows 需要 cmd /c 包装？',
+        faq5_a: '在 Windows 上，<code>npx</code> 实际上是 <code>npx.cmd</code>，Claude Desktop 可能找不到。用 <code>"command": "cmd", "args": ["/c", "npx", ...]</code> 可以确保命令在所有平台上正确运行。',
+        faq6_q: '我的数据会被发送到服务器吗？',
+        faq6_a: '不会。所有生成都发生在你的浏览器中。没有任何数据发送到外部服务器。',
+        footer_text: '完全免费，无需注册。为 MCP 社区而作。'
+    }
+};
+
+var servers = [
+    {id:'filesystem',icon:'📁',name:'Filesystem',desc:'Read/write local files',cat:'@modelcontextprotocol/server-filesystem',hasPath:true,pathLabel:'Allowed directory path'},
+    {id:'memory',icon:'🧠',name:'Memory',desc:'Knowledge graph memory',cat:'@modelcontextprotocol/server-memory'},
+    {id:'fetch',icon:'🌐',name:'Fetch',desc:'Fetch & convert web pages',cat:'@modelcontextprotocol/server-fetch'},
+    {id:'git',icon:'🔀',name:'Git',desc:'Read/search Git repos',cat:'@modelcontextprotocol/server-git',hasPath:true,pathLabel:'Repository path'},
+    {id:'sequential-thinking',icon:'💭',name:'Sequential Thinking',desc:'Chain-of-thought reasoning',cat:'@modelcontextprotocol/server-sequential-thinking'},
+    {id:'time',icon:'⏰',name:'Time',desc:'Time & timezone tools',cat:'@modelcontextprotocol/server-time'},
+    {id:'sqlite',icon:'🗄️',name:'SQLite',desc:'Query SQLite databases',cat:'@anthropic-ai/mcp-server-sqlite',hasPath:true,pathLabel:'Database file path',command:'uvx',argsPrefix:['mcp-server-sqlite','--db-path']},
+    {id:'github',icon:'🐙',name:'GitHub',desc:'GitHub API integration',cat:'@modelcontextprotocol/server-github',hasEnv:[{key:'GITHUB_PERSONAL_ACCESS_TOKEN',label:'GitHub PAT'}]},
+    {id:'brave-search',icon:'🔍',name:'Brave Search',desc:'Web search via Brave API',cat:'@anthropic-ai/mcp-server-brave-search',hasEnv:[{key:'BRAVE_API_KEY',label:'Brave API Key'}]},
+    {id:'puppeteer',icon:'🎭',name:'Puppeteer',desc:'Browser automation',cat:'@anthropic-ai/mcp-server-puppeteer'},
+    {id:'slack',icon:'💬',name:'Slack',desc:'Read Slack messages',cat:'@anthropic-ai/mcp-server-slack',hasEnv:[{key:'SLACK_BOT_TOKEN',label:'Bot Token'},{key:'SLACK_TEAM_ID',label:'Team ID'}]},
+    {id:'google-maps',icon:'🗺️',name:'Google Maps',desc:'Places & directions',cat:'@anthropic-ai/mcp-server-google-maps',hasEnv:[{key:'GOOGLE_MAPS_API_KEY',label:'Google Maps API Key'}]},
+    {id:'postgres',icon:'🐘',name:'PostgreSQL',desc:'Query PostgreSQL DB',cat:'@anthropic-ai/mcp-server-postgres',hasEnv:[{key:'DATABASE_URL',label:'PostgreSQL connection string'}]},
+    {id:'everything',icon:'🎯',name:'Everything',desc:'Test/reference server',cat:'@modelcontextprotocol/server-everything'},
+    {id:'playwright',icon:'🎭',name:'Playwright MCP',desc:'Browser automation (alt)',cat:'@playwright/mcp@latest'},
+    {id:'filesystem-py',icon:'📂',name:'Filesystem (Python)',desc:'Python file operations',cat:'mcp-server-filesystem',command:'uvx',argsPrefix:['mcp-server-filesystem'],hasPath:true,pathLabel:'Root directory'},
+    {id:'sqlite-py',icon:'📊',name:'SQLite (Python)',desc:'Python SQLite tools',cat:'mcp-server-sqlite',command:'uvx',argsPrefix:['mcp-server-sqlite','--db-path'],hasPath:true,pathLabel:'Database file path'}
+];
+
+var clientNames = {
+    claude: 'Claude Desktop',
+    cursor: 'Cursor',
+    vscode: 'VS Code',
+    windsurf: 'Windsurf'
+};
+
+var clientBadges = {
+    claude: 'client-claude',
+    cursor: 'client-cursor',
+    vscode: 'client-vscode',
+    windsurf: 'client-windsurf'
+};
+
+function init() {
+    renderTemplateGrid();
+    renderMultiCheckboxes();
+    addCustomEnv();
+}
+
+function renderTemplateGrid() {
+    var grid = document.getElementById('templateGrid');
+    var html = '';
+    for (var i = 0; i < servers.length; i++) {
+        var s = servers[i];
+        html += '<div class="template-card" data-id="' + s.id + '" onclick="selectTemplate(\'' + s.id + '\')">';
+        html += '<div class="icon">' + s.icon + '</div>';
+        html += '<div class="name">' + s.name + '</div>';
+        html += '<div class="desc">' + s.desc + '</div>';
+        html += '</div>';
+    }
+    grid.innerHTML = html;
+}
+
+function renderMultiCheckboxes() {
+    var group = document.getElementById('multiCheckboxGroup');
+    var html = '';
+    for (var i = 0; i < servers.length; i++) {
+        var s = servers[i];
+        html += '<label class="checkbox-label" onclick="toggleMulti(this)">';
+        html += '<input type="checkbox" value="' + s.id + '">';
+        html += s.icon + ' ' + s.name;
+        html += '</label>';
+    }
+    group.innerHTML = html;
+}
+
+function selectTemplate(id) {
+    selectedTemplate = id;
+    var cards = document.querySelectorAll('.template-card');
+    for (var i = 0; i < cards.length; i++) {
+        cards[i].classList.remove('selected');
+        if (cards[i].getAttribute('data-id') === id) cards[i].classList.add('selected');
+    }
+    var server = null;
+    for (var i = 0; i < servers.length; i++) {
+        if (servers[i].id === id) { server = servers[i]; break; }
+    }
+    if (!server) return;
+
+    var html = '<div class="section-label">' + (currentLang === 'zh' ? '目标客户端' : 'Target Client') + '</div>';
+    html += '<select id="tplClient" onchange="generateTemplate()">';
+    html += '<option value="claude">Claude Desktop</option>';
+    html += '<option value="cursor">Cursor</option>';
+    html += '<option value="vscode">VS Code (Copilot)</option>';
+    html += '<option value="windsurf">Windsurf</option>';
+    html += '</select>';
+    html += '<div class="section-label">' + (currentLang === 'zh' ? '平台适配' : 'Platform') + '</div>';
+    html += '<select id="tplPlatform" onchange="generateTemplate()">';
+    html += '<option value="auto">' + (currentLang === 'zh' ? '自动检测' : 'Auto-detect') + '</option>';
+    html += '<option value="windows">Windows (cmd /c)</option>';
+    html += '<option value="macos">macOS / Linux</option>';
+    html += '</select>';
+
+    if (server.hasPath) {
+        html += '<div class="section-label">' + (server.pathLabel || 'Path') + '</div>';
+        html += '<input type="text" id="tplPath" placeholder="/path/to/..." oninput="generateTemplate()">';
+        html += '<div class="path-hint">' + (currentLang === 'zh' ? '替换为实际路径' : 'Replace with actual path') + '</div>';
+    }
+    if (server.hasEnv && server.hasEnv.length > 0) {
+        for (var i = 0; i < server.hasEnv.length; i++) {
+            html += '<div class="section-label">' + server.hasEnv[i].label + '</div>';
+            html += '<input type="text" id="tplEnv_' + server.hasEnv[i].key + '" placeholder="' + server.hasEnv[i].key + '" oninput="generateTemplate()">';
+        }
+    }
+
+    html += '<div class="btn-group"><button class="btn btn-primary" onclick="generateTemplate()">' + (currentLang === 'zh' ? '🚀 生成配置' : '🚀 Generate Config') + '</button></div>';
+    document.getElementById('serverConfig').innerHTML = html;
+    generateTemplate();
+}
+
+function buildServerObj(server, client, platform, pathValue, envValues) {
+    var cmd = server.command || 'npx';
+    var args = [];
+    var env = {};
+    if (server.argsPrefix) {
+        for (var i = 0; i < server.argsPrefix.length; i++) args.push(server.argsPrefix[i]);
+    } else {
+        args.push('-y');
+        args.push(server.cat);
+    }
+    if (server.hasPath && pathValue) args.push(pathValue);
+    if (server.hasEnv) {
+        for (var i = 0; i < server.hasEnv.length; i++) {
+            var ek = server.hasEnv[i].key;
+            if (envValues && envValues[ek]) env[ek] = envValues[ek];
+        }
+    }
+    var obj = { command: cmd, args: args };
+    if (Object.keys(env).length > 0) obj.env = env;
+    if (platform === 'windows' || (platform === 'auto' && client === 'claude')) {
+        return { command: 'cmd', args: ['/c', cmd].concat(args), env: Object.keys(env).length > 0 ? env : undefined };
+    }
+    return obj;
+}
+
+function cleanEmpty(obj) {
+    if (obj.env && Object.keys(obj.env).length === 0) delete obj.env;
+    return obj;
+}
+
+function generateTemplate() {
+    if (!selectedTemplate) return;
+    var server = null;
+    for (var i = 0; i < servers.length; i++) {
+        if (servers[i].id === selectedTemplate) { server = servers[i]; break; }
+    }
+    if (!server) return;
+    var client = 'claude';
+    var platform = 'auto';
+    var pathValue = '';
+    var envValues = {};
+    var clientEl = document.getElementById('tplClient');
+    var platformEl = document.getElementById('tplPlatform');
+    if (clientEl) client = clientEl.value;
+    if (platformEl) platform = platformEl.value;
+    if (server.hasPath) {
+        var pathEl = document.getElementById('tplPath');
+        if (pathEl) pathValue = pathEl.value;
+    }
+    if (server.hasEnv) {
+        for (var i = 0; i < server.hasEnv.length; i++) {
+            var ek = server.hasEnv[i].key;
+            var el = document.getElementById('tplEnv_' + ek);
+            if (el) envValues[ek] = el.value;
+        }
+    }
+    var serverObj = buildServerObj(server, client, platform, pathValue, envValues);
+    serverObj = cleanEmpty(serverObj);
+    var config = { mcpServers: {} };
+    config.mcpServers[server.id] = serverObj;
+    currentOutput = JSON.stringify(config, null, 2);
+    document.getElementById('outputBox').textContent = currentOutput;
+    updateOutputClient(client);
+    showTips(server, client);
+}
+
+function generateCustom() {
+    var name = document.getElementById('customName').value || 'my-mcp-server';
+    var command = document.getElementById('customCommand').value || 'npx';
+    var argsRaw = document.getElementById('customArgs').value;
+    var args = argsRaw.split('\n').filter(function(l){return l.trim()});
+    var env = {};
+    var envRows = document.querySelectorAll('#customEnv .env-row');
+    for (var i = 0; i < envRows.length; i++) {
+        var key = envRows[i].querySelector('input[data-type="key"]').value.trim();
+        var val = envRows[i].querySelector('input[data-type="val"]').value.trim();
+        if (key) env[key] = val;
+    }
+    var obj = { command: command, args: args };
+    if (Object.keys(env).length > 0) obj.env = env;
+    obj = cleanEmpty(obj);
+    var config = { mcpServers: {} };
+    config.mcpServers[name] = obj;
+    currentOutput = JSON.stringify(config, null, 2);
+    document.getElementById('outputBox').textContent = currentOutput;
+    var client = document.getElementById('customClient').value;
+    updateOutputClient(client);
+}
+
+function generateMulti() {
+    var client = document.getElementById('multiClient').value;
+    var config = { mcpServers: {} };
+    var checks = document.querySelectorAll('#multiCheckboxGroup input:checked');
+    for (var i = 0; i < checks.length; i++) {
+        var server = null;
+        for (var j = 0; j < servers.length; j++) {
+            if (servers[j].id === checks[i].value) { server = servers[j]; break; }
+        }
+        if (server) {
+            var obj = buildServerObj(server, client, 'auto', '', {});
+            obj = cleanEmpty(obj);
+            config.mcpServers[server.id] = obj;
+        }
+    }
+    if (Object.keys(config.mcpServers).length === 0) {
+        document.getElementById('outputBox').textContent = currentLang === 'zh' ? '// 选择至少一个服务器' : '// Select at least one server';
+        return;
+    }
+    currentOutput = JSON.stringify(config, null, 2);
+    document.getElementById('outputBox').textContent = currentOutput;
+    updateOutputClient(client);
+}
+
+function toggleMulti(label) {
+    setTimeout(function(){
+        var input = label.querySelector('input');
+        if (input.checked) label.classList.add('checked');
+        else label.classList.remove('checked');
+        generateMulti();
+    }, 10);
+}
+
+function addCustomEnv() {
+    var container = document.getElementById('customEnv');
+    var div = document.createElement('div');
+    div.className = 'env-row';
+    div.innerHTML = '<input type="text" data-type="key" placeholder="KEY" oninput="generateCustom()" style="flex:1;margin-bottom:0">' +
+        '<input type="text" data-type="val" placeholder="value" oninput="generateCustom()" style="flex:1;margin-bottom:0">' +
+        '<button class="btn-remove" onclick="this.parentElement.remove();generateCustom()">✕</button>';
+    container.appendChild(div);
+}
+
+function updateOutputClient(client) {
+    var badge = document.getElementById('outputClient');
+    badge.textContent = clientNames[client] || 'Claude Desktop';
+    badge.className = 'client-badge ' + (clientBadges[client] || 'client-claude');
+}
+
+function showTips(server, client) {
+    var tips = document.getElementById('tipsBox');
+    var text = document.getElementById('tipsText');
+    var msgs = {
+        en: {
+            claude: 'Save to <code>claude_desktop_config.json</code> → Restart Claude Desktop',
+            cursor: 'Save to Cursor MCP settings → Restart Cursor',
+            vscode: 'Save to <code>~/.vscode/mcp.json</code> → Reload VS Code',
+            windsurf: 'Save to <code>~/.windsurf/mcp.json</code> → Reload Windsurf'
+        },
+        zh: {
+            claude: '保存到 <code>claude_desktop_config.json</code> → 重启 Claude Desktop',
+            cursor: '保存到 Cursor MCP 设置 → 重启 Cursor',
+            vscode: '保存到 <code>~/.vscode/mcp.json</code> → 重新加载 VS Code',
+            windsurf: '保存到 <code>~/.windsurf/mcp.json</code> → 重新加载 Windsurf'
+        }
+    };
+    if (server.hasPath) {
+        var pathMsg = currentLang === 'zh' ? ' ⚠️ 记得替换路径为实际目录！' : ' ⚠️ Remember to replace the path with your actual directory!';
+        text.innerHTML = (msgs[currentLang] || msgs.en)[client] + pathMsg;
+    } else {
+        text.innerHTML = (msgs[currentLang] || msgs.en)[client];
+    }
+    tips.style.display = 'block';
+}
+
+function copyConfig() {
+    if (!currentOutput) return;
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(currentOutput);
+    } else {
+        var ta = document.createElement('textarea');
+        ta.value = currentOutput;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+    }
+    showToast(currentLang === 'zh' ? '✅ 已复制到剪贴板！' : '✅ Copied to clipboard!');
+}
+
+function downloadConfig() {
+    if (!currentOutput) return;
+    var blob = new Blob([currentOutput], {type: 'application/json'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'mcp.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+}
+
+function clearConfig() {
+    currentOutput = '';
+    document.getElementById('outputBox').textContent = currentLang === 'zh' ? '// 选择一个服务器来生成配置' : '// Select a server to generate config';
+    document.getElementById('tipsBox').style.display = 'none';
+}
+
+function switchMode(mode) {
+    currentMode = mode;
+    var tabs = document.querySelectorAll('.mode-tab');
+    for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
+    if (mode === 'template') {
+        document.getElementById('templateMode').style.display = 'block';
+        document.getElementById('customMode').style.display = 'none';
+        document.getElementById('multiMode').style.display = 'none';
+        tabs[0].classList.add('active');
+    } else if (mode === 'custom') {
+        document.getElementById('templateMode').style.display = 'none';
+        document.getElementById('customMode').style.display = 'block';
+        document.getElementById('multiMode').style.display = 'none';
+        tabs[1].classList.add('active');
+    } else {
+        document.getElementById('templateMode').style.display = 'none';
+        document.getElementById('customMode').style.display = 'none';
+        document.getElementById('multiMode').style.display = 'block';
+        tabs[2].classList.add('active');
+    }
+}
+
+function toggleLang() {
+    currentLang = currentLang === 'en' ? 'zh' : 'en';
+    document.getElementById('langBtn').textContent = currentLang === 'en' ? '中文' : 'EN';
+    var t = i18n[currentLang];
+    var els = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < els.length; i++) {
+        var key = els[i].getAttribute('data-i18n');
+        if (t[key]) els[i].innerHTML = t[key];
+    }
+    // Re-render dynamic content
+    if (currentMode === 'template' && selectedTemplate) {
+        selectTemplate(selectedTemplate);
+    } else {
+        clearConfig();
+    }
+    if (currentMode === 'custom') {
+        generateCustom();
+    }
+}
+
+function toggleFaq(item) {
+    var wasOpen = item.classList.contains('open');
+    var items = document.querySelectorAll('.faq-item');
+    for (var i = 0; i < items.length; i++) items[i].classList.remove('open');
+    if (!wasOpen) item.classList.add('open');
+}
+
+function showToast(msg) {
+    var toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(function(){ toast.classList.remove('show'); }, 2000);
+}
+
+init();
+</script>
+</body>
+</html>
