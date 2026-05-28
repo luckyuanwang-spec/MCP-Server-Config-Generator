@@ -20,4 +20,4 @@ Free online tool to generate MCP server configuration files for Claude Desktop, 
 
 ## Live
 
-https://mcp-config-generator.vercel.app/
+https://mcp-server-config-generator.vercel.app/
